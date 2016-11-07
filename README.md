@@ -19,18 +19,21 @@ http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 
 #必要なもの
 
-mysql
-python ( requests, bs4 (beautifulSoup), mysql-connector )
+* mysql
+* python
+  * requests
+  * bs4 (BeautifulSoup)
+  * mysql-connector )
 
 #使用方法
 
 ~~~
-getDpc 西暦年 報告ページURL
+getDpc.py 西暦年 報告ページURL
 ~~~
 
 例：
 ~~~
-getDpc 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
+getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 ~~~
 
 #テーブル構造
