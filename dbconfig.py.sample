@@ -1,0 +1,3 @@
+#!/usr/bin/python
+
+mydb = {'host': 'localhost', 'user': 'hoge', 'password': 'pass', 'database':'dpc'}
