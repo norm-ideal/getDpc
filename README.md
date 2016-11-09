@@ -40,6 +40,7 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 
 |hospitals|病院テーブル|
 |:--|:--|
+|id|病院ID|
 |year|西暦年|
 |nr|その年の病院番号|
 |oldnr|前の年の病院番号|
@@ -53,19 +54,21 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 |tr1|処置１有無テーブル|
 |:--|:--|
 |year|西暦年|
+|nr|病院番号（西暦年依存）|
 |did|病気ID|
-|withop1|手術の有無(0/1)|
+|withop|手術の有無(0/1)|
 |withtr1|処置１の有無(0/1)|
 |cases|件数|
-|days|入院日数|
+|days|入院日数（合計数）|
 
 |tr2|処置２有無テーブル|
 |:--|:--|
 |year|西暦年|
+|nr|病院番号（西暦年依存）|
 |did|病気ID|
-|withop2|手術の有無(0/1)|
+|withop|手術の有無(0/1)|
 |withtr2|処置２の有無(0/1)|
 |cases|件数|
-|days|入院日数|
+|days|入院日数（合計数）|
 
 
