@@ -38,31 +38,34 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 
 #テーブル構造
 
-~~~
-hospitals
-  year
-  nr
-  oldnr
-  name
+|hospitals|病院テーブル|
+|:--|:--|
+|year|西暦年|
+|nr|その年の病院番号|
+|oldnr|前の年の病院番号|
+|name|病院名|
 
-disname
-  did
-  dname
+|disname|病気テーブル|
+|:--|:--|
+|did|病気ID|
+|dname|病気名|
 
-tr1
-  year
-  did
-  withop1
-  withtr1
-  cases
-  days
-  
-tr2
-  year
-  did
-  withop1
-  withtr1
-  cases
-  days
-~~~
+|tr1|処置１有無テーブル|
+|:--|:--|
+|year|西暦年|
+|did|病気ID|
+|withop1|手術の有無(0/1)|
+|withtr1|処置１の有無(0/1)|
+|cases|件数|
+|days|入院日数|
+
+|tr2|処置２有無テーブル|
+|:--|:--|
+|year|西暦年|
+|did|病気ID|
+|withop2|手術の有無(0/1)|
+|withtr2|処置２の有無(0/1)|
+|cases|件数|
+|days|入院日数|
+
 
