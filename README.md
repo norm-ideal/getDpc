@@ -20,7 +20,7 @@ http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 #必要なもの
 
 * mysql
-* python
+* python (2.x)
   * requests
   * bs4 (BeautifulSoup)
   * mysql-connector
@@ -40,7 +40,7 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 
 |hospitals|病院テーブル|
 |:--|:--|
-|id|病院ID|
+|id|病院ID （内部で振られるユニークID）|
 |year|西暦年|
 |nr|その年の病院番号|
 |oldnr|前の年の病院番号|
