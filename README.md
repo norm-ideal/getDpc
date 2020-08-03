@@ -75,4 +75,11 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 |cases|件数|
 |days|入院日数（合計数）|
 
-
+# リンク
+- [平成２９年度](https://www.mhlw.go.jp/stf/shingi2/0000196043_00001.html)
+- [平成２８年度](https://www.mhlw.go.jp/stf/shingi2/0000196043.html)
+- [平成２７年度](https://www.mhlw.go.jp/stf/shingi2/0000150723.html)
+- [平成２６年度](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
+- [平成２５年度](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
+- [平成２４年度](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
+- [平成２２，２３年度](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
