@@ -1,4 +1,4 @@
-import config
+import dbconfig
 
 import sys
 import mysql.connector
@@ -41,13 +41,13 @@ def getOneSheetS(sheetname, year, dbcon):
         sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
 
         # The data in the line starts from column 4 (index 3)
-        c = 3 
+        c = 3
 
         did = "000000"
         dname = "------"
 
         occflag = True  # flag to distiguish between cases and days
-        days = 0        # days ( round(occurance * average_days ) 
+        days = 0        # days ( round(occurance * average_days )
         occs = {};      # occurance array of cases, indexed by operation_ID
 
         while c < sheet.ncols:
@@ -62,7 +62,7 @@ def getOneSheetS(sheetname, year, dbcon):
                     dbcon.cursor().execute(sql)
             elif sheet.cell(2,c).value:
                 occflag = False
-            
+
             ocid = sheet.cell(3,c).value
             v  = convertNaN(sheet.cell(r,c).value)
 
@@ -74,10 +74,10 @@ def getOneSheetS(sheetname, year, dbcon):
                     days = round(occs[ocid] * v)
                     sql = insertcases % (int(year), nr, did, ocid, occs[ocid], days, occs[ocid], days);
                     dbcon.cursor().execute(sql);
-            
+
             c = c + 1
     dbcon.commit()
-    print "processed ", sheetname
+    print("processed ", sheetname)
 
 # Get the sheet type II - with operation/treatment
 def getOneSheetT(sheetname, year, dbcon, treatment):
@@ -95,14 +95,14 @@ def getOneSheetT(sheetname, year, dbcon, treatment):
     for r in range(5, sheet.nrows):
         nr = sheet.cell(r,0).value
         sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
-        c = 3 
+        c = 3
 
         nr = sheet.cell(r, 0).value
 
         while c < sheet.ncols:
             did = sheet.cell(0,c).value
             dname = sheet.cell(1,c).value
-            
+
             # for the first line, add disname (update if exists)
             if r==5:
                 sql = insertdname % (did, dname, dname)
@@ -126,11 +126,11 @@ def getOneSheetT(sheetname, year, dbcon, treatment):
             dbcon.cursor().execute(sql)
             sql = insertcases % (year, nr, did, False, False, c_op0tr0, d_op0tr0, c_op0tr0, d_op0tr0, )
             dbcon.cursor().execute(sql)
-            
+
             c = c + 8
 
     dbcon.commit()
-    print "processed ", sheetname
+    print("processed ", sheetname)
 
 
 # Get the sheet type Hospital List
@@ -143,12 +143,10 @@ def getHospitals(sheetname, year, dbcon):
     for r in range(1, sheet.nrows):
         nr = sheet.cell(r,0).value
         if not nr:
-            break 
+            break
         oldnr = sheet.cell(r,1).value
         name = sheet.cell(r,2).value
         sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-1.0)/(sheet.nrows-1)*100, nr) )
         dbcon.cursor().execute( sql % (year, nr, oldnr, name, name) )
 
     dbcon.cursor().execute( "update hospitals as new right join hospitals as old on new.oldnr = old.nr and new.year = old.year+1 and new.year = %d set new.id = old.id" % (year,) )
-
-
