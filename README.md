@@ -37,6 +37,9 @@ getDpc.py 西暦年 報告ページURL
 getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 ~~~
 
+注意：
+* データは「古い順」に読み込まないと、共通病院 ID の割り振りに失敗します。
+
 # テーブル構造
 
 |hospitals|病院テーブル|
