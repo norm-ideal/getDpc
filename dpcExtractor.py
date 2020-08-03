@@ -29,8 +29,10 @@ def getOneSheetS(sheetname, year, dbcon):
     sheet = wb.sheets()[0]
 
     # prepare the SQL commands
-    insertdname = "insert into disname (did, dname) values ('%s', '%s') on duplicate key update dname='%s'"
-    insertcases = "insert into summary (year, nr, did, opid, cases, days) values (%d, '%s', '%s', '%s', %d, %d) on duplicate key update cases=cases+%d, days=days+%d"
+    insertdname = "insert into disname (did, dname) values (%s, %s) on duplicate key update dname=%s"
+    insertcases = "insert into summary (year, nr, did, opid, cases, days) values (?, %s, %s, %s, ?, ?) on duplicate key update cases=cases+?, days=days+?"
+
+    cs = dbcon.cursor(prepared=True)
 
     # process the sheet. The data line is starting from row 5 (index 4)
     for r in range(4, sheet.nrows):
@@ -38,7 +40,8 @@ def getOneSheetS(sheetname, year, dbcon):
         nr = sheet.cell(r,0).value
 
         # show progress
-        sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
+        if r % 20 == 0:
+            sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
 
         # The data in the line starts from column 4 (index 3)
         c = 3
@@ -58,8 +61,8 @@ def getOneSheetS(sheetname, year, dbcon):
                 # SQL insert into summary
                 # print did, dname
                 if r == 4:
-                    sql = insertdname % (did, dname, dname)
-                    dbcon.cursor().execute(sql)
+
+                    cs.execute(insertdname , (did, dname, dname))
             elif sheet.cell(2,c).value:
                 occflag = False
 
@@ -72,29 +75,34 @@ def getOneSheetS(sheetname, year, dbcon):
                     occs[ocid] = v;
                 else:
                     days = round(occs[ocid] * v)
-                    sql = insertcases % (int(year), nr, did, ocid, occs[ocid], days, occs[ocid], days);
-                    dbcon.cursor().execute(sql);
-
+                    cs.execute(insertcases, (int(year), nr, did, ocid, occs[ocid], days, occs[ocid], days))
             c = c + 1
+
+    cs.close()
     dbcon.commit()
     print("processed ", sheetname)
+
+
 
 # Get the sheet type II - with operation/treatment
 def getOneSheetT(sheetname, year, dbcon, treatment):
     wb = xlrd.open_workbook(sheetname)
     sheet = wb.sheets()[0]
 
-    insertdname = "insert into disname (did, dname) values ('%s', '%s') on duplicate key update dname='%s'"
+    insertdname = "insert into disname (did, dname) values (%s, %s) on duplicate key update dname=%s"
     if treatment == 1:
         insertcases = "insert into tr1 (year, nr, did, withop, withtr1, cases, days)"
     else:
         insertcases = "insert into tr2 (year, nr, did, withop, withtr2, cases, days)"
 
-    insertcases += " values (%d, '%s', '%s', %d, %d, %d, %d) on duplicate key update cases=cases+%d, days=days+%d"
+    insertcases += " values (?, %s, %s, ?, ?, ?, ?) on duplicate key update cases=cases+?, days=days+?"
+
+    st = dbcon.cursor(prepared = True)
 
     for r in range(5, sheet.nrows):
         nr = sheet.cell(r,0).value
-        sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
+        if r % 20 == 0:
+            sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-4.0)/(sheet.nrows-4)*100, nr) )
         c = 3
 
         nr = sheet.cell(r, 0).value
@@ -105,8 +113,7 @@ def getOneSheetT(sheetname, year, dbcon, treatment):
 
             # for the first line, add disname (update if exists)
             if r==5:
-                sql = insertdname % (did, dname, dname)
-                dbcon.cursor().execute(sql)
+                st.execute(insertdname, (did, dname, dname))
 
             c_op1tr1 = convertNaN(sheet.cell(r,c  ).value)
             c_op1tr0 = convertNaN(sheet.cell(r,c+1).value)
@@ -118,17 +125,14 @@ def getOneSheetT(sheetname, year, dbcon, treatment):
             d_op0tr1 = round( convertNaN(sheet.cell(r,c+6).value) * c_op0tr1 )
             d_op0tr0 = round( convertNaN(sheet.cell(r,c+7).value) * c_op0tr0 )
 
-            sql = insertcases % (year, nr, did, True , True , c_op1tr1, d_op1tr1, c_op1tr1, d_op1tr1, )
-            dbcon.cursor().execute(sql)
-            sql = insertcases % (year, nr, did, True , False, c_op1tr0, d_op1tr0, c_op1tr0, d_op1tr0, )
-            dbcon.cursor().execute(sql)
-            sql = insertcases % (year, nr, did, False, True , c_op0tr1, d_op0tr1, c_op0tr1, d_op0tr1, )
-            dbcon.cursor().execute(sql)
-            sql = insertcases % (year, nr, did, False, False, c_op0tr0, d_op0tr0, c_op0tr0, d_op0tr0, )
-            dbcon.cursor().execute(sql)
+            st.execute(insertcases , (year, nr, did, True , True , c_op1tr1, d_op1tr1, c_op1tr1, d_op1tr1, ))
+            st.execute(insertcases , (year, nr, did, True , False, c_op1tr0, d_op1tr0, c_op1tr0, d_op1tr0, ))
+            st.execute(insertcases , (year, nr, did, False, True , c_op0tr1, d_op0tr1, c_op0tr1, d_op0tr1, ))
+            st.execute(insertcases , (year, nr, did, False, False, c_op0tr0, d_op0tr0, c_op0tr0, d_op0tr0, ))
 
             c = c + 8
 
+    st.close()
     dbcon.commit()
     print("processed ", sheetname)
 
@@ -138,15 +142,32 @@ def getHospitals(sheetname, year, dbcon):
     wb = xlrd.open_workbook(sheetname)
     sheet = wb.sheets()[0]
 
-    sql = "insert into hospitals (year, nr, oldnr, name) values (%d, '%s', '%s', '%s')"
-    sql += " on duplicate key update name = '%s'"
+    sql = "insert into hospitals (year, nr, oldnr, name) values (?, %s, %s, %s)"
+    sql += " on duplicate key update name = %s"
+    namecol = 0
+    for c in range(sheet.ncols):
+        if sheet.cell(0, c).value=='施設名':
+            namecol = c
+            print('施設名 found at ', namecol)
+            break
+    else:
+        print('Cannot find 施設名 column')
+        sys.exit(-1)
+
+    st = dbcon.cursor(prepared=True)
     for r in range(1, sheet.nrows):
         nr = sheet.cell(r,0).value
         if not nr:
             break
         oldnr = sheet.cell(r,1).value
-        name = sheet.cell(r,2).value
-        sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-1.0)/(sheet.nrows-1)*100, nr) )
-        dbcon.cursor().execute( sql % (year, nr, oldnr, name, name) )
+        name = sheet.cell(r,namecol).value
+        if r % 10 == 0:
+            sys.stdout.write( "{0:2.0f}% {1}\r".format( (r-1.0)/(sheet.nrows-1)*100, nr) )
+        try:
+            st.execute( sql, (year, nr, oldnr, name, name) )
+        except mysql.connector.Error as err:
+            print("Something went wrong: {}".format(err))
 
-    dbcon.cursor().execute( "update hospitals as new right join hospitals as old on new.oldnr = old.nr and new.year = old.year+1 and new.year = %d set new.id = old.id" % (year,) )
+    st.execute( """update hospitals as new right join hospitals as old on new.oldnr = old.nr and new.year = old.year+1 and new.year = ? set new.id = old.id""", (year,) )
+    st.close()
+    dbcon.commit()
