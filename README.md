@@ -76,10 +76,10 @@ getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 |days|入院日数（合計数）|
 
 # リンク
-- [平成２９年度](https://www.mhlw.go.jp/stf/shingi2/0000196043_00001.html)
-- [平成２８年度](https://www.mhlw.go.jp/stf/shingi2/0000196043.html)
-- [平成２７年度](https://www.mhlw.go.jp/stf/shingi2/0000150723.html)
-- [平成２６年度](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
-- [平成２５年度](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
-- [平成２４年度](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
-- [平成２２，２３年度](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
+- [平成２９年度 2017](https://www.mhlw.go.jp/stf/shingi2/0000196043_00001.html)
+- [平成２８年度 2016](https://www.mhlw.go.jp/stf/shingi2/0000196043.html)
+- [平成２７年度 2015](https://www.mhlw.go.jp/stf/shingi2/0000150723.html)
+- [平成２６年度 2014](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
+- [平成２５年度 2013](https://www.mhlw.go.jp/stf/shingi2/0000104146.html)
+- [平成２４年度 2012](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
+- [平成２３年度 2011](https://www.mhlw.go.jp/stf/shingi/0000023522.html)
