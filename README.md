@@ -1,4 +1,4 @@
-#目的
+# 目的
 
 このプロジェクトは、中央社会保険医療協議会診療報酬調査専門組織ＤＰＣ評価分科会の「DPC導入の影響評価に関する調査」報告ページの資料をダウンロードしてきて
 使いやすいようにデータベースに落とすことを目的としています。
@@ -17,15 +17,16 @@ http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 
 これらを、一括してデータベースに格納することにより、経年比較や集計が手軽に行えるようになることが期待されます。
 
-#必要なもの
+# 必要なもの
 
 * mysql
-* python (2.x)
+* python (3.x)
   * requests
   * bs4 (BeautifulSoup)
-  * mysql-connector
+  * mysql-connector (mysql-connector-python3)
+  * xlrd (python3-xlrd)
 
-#使用方法
+# 使用方法
 
 ~~~
 getDpc.py 西暦年 報告ページURL
@@ -36,7 +37,7 @@ getDpc.py 西暦年 報告ページURL
 getDpc.py 2014 http://www.mhlw.go.jp/stf/shingi2/0000104146.html
 ~~~
 
-#テーブル構造
+# テーブル構造
 
 |hospitals|病院テーブル|
 |:--|:--|
